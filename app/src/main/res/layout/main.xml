@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:gravity="top"
+	android:padding="22dp"
+	android:orientation="vertical"
+	android:id="@+id/mainRoot">
+
+	<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content" android:gravity="center">
+
+		<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="选择CCB本体版本："/>
+
+		<Button
+				android:text="更新列表"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:id="@+id/update_releases"/>
+		<Button
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="获取"
+				android:id="@+id/click_releases"/>
+
+	</LinearLayout>
+	<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content" android:gravity="center">
+
+		<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="选择Otopack+版本："/>
+
+		<Button
+				android:text="更新列表"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:id="@+id/update_otopack_releases"/>
+		<Button
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="获取"
+				android:id="@+id/click_otopack_releases"/>
+
+	</LinearLayout>
+	<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content" android:gravity="center">
+
+		<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="选择CCSound版本："/>
+
+		<Button
+				android:text="更新列表"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:id="@+id/update_ccsound_releases"/>
+		<Button
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="获取"
+				android:id="@+id/click_ccsound_releases"/>
+
+	</LinearLayout>
+	<ListView
+			android:layout_width="match_parent"
+			android:layout_height="match_parent" android:id="@+id/task_list"/>
+
+</LinearLayout>
+

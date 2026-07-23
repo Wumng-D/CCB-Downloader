@@ -1,0 +1,77 @@
+apply plugin: "com.android.application"
+
+android {
+	buildToolsVersion "34.0.0"
+	compileSdkVersion 34
+	
+	namespace "io.wmd.ccbdownloader"
+	defaultConfig {
+		applicationId "io.wmd.ccbdownloader"
+		minSdkVersion 24
+		targetSdkVersion 34
+		versionCode 1
+		versionName "0.1"
+	}
+	
+	// ecj模式(设置 -> 实验室 -> ecj)设置Java语法版本
+	compileOptions {
+		// AIDE+最高支持23，gradle 8.5仅到17
+		sourceCompatibility JavaVersion.VERSION_11
+		targetCompatibility JavaVersion.VERSION_11
+	}
+	
+	// 签名文件配置
+	signingConfigs{
+		// release自行配置
+		release{
+			keyAlias "AIDE+"
+			keyPassword "123789456"
+			storePassword "123789456"
+			storeFile file("app-release.jks")
+		}
+		debug{
+			keyAlias "androiddebug"
+			keyPassword "123789456"
+			storePassword "123789456"
+			storeFile file("app-debug.jks")
+		}
+	}
+	
+	buildTypes {
+		// 仅支持配置release(但不分是否是 release)
+		// 仅当值为true时启用
+		release {
+		    signingConfig signingConfigs.release
+       
+			// 资源混淆
+			shrinkResources false
+			// 代码混淆[增量构建失效]
+			minifyEnabled false
+			// 代码混淆配置文件 基础混淆规则(默认启用)
+			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+			
+			//在基础规则上增加优化配置
+			//proguardFiles getDefaultProguardFile('proguard-android-optimize.txt), 'proguard-rules.pro'
+			//通用混淆规则
+			//proguardFiles getDefaultProguardFile('proguard-common.txt'), 'proguard-rules.pro'
+		}
+	}
+	
+	// viewBinding配置
+	buildFeatures{
+		// true则启用 viewBinding
+		viewBinding false
+		// 使用Androidx，暂时先这样
+		// 默认为true，gradle 8.5不支持此写法
+		// 请更改gradle.properties文件 android.useAndroidX
+		// useAndroidx true
+	}
+}
+
+dependencies {
+	implementation 'com.squareup.okhttp3:okhttp:4.9.1'
+	implementation 'com.liulishuo.okdownload:okdownload:1.0.7'
+	implementation 'com.liulishuo.okdownload:sqlite:1.0.7'
+	implementation 'com.liulishuo.okdownload:okhttp:1.0.7'
+	implementation 'org.json:json:20260522'
+}
