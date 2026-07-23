@@ -171,7 +171,7 @@ public class MainController {
 
     public void getUrlAsync(String url, Callback callback) {
         Request request = new Request.Builder()
-                .url(url)
+                .url(proxy_url + url) // use proxy
                 .addHeader("Content-Type", "application/json")
                 .build();
         client.newCall(request).enqueue(callback);
