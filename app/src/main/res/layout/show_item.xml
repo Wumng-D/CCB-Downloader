@@ -9,10 +9,10 @@
             android:layout_height="wrap_content" android:id="@+id/detail_title"/>
     <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent" android:layout_weight="1">
-        <TextView
+            android:layout_height="match_parent" android:layout_weight="1" android:fillViewport="true">
+        <io.wmd.ccbdownloader.ui.ChangelogView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" android:id="@+id/detail_text"/>
+                android:layout_height="wrap_content" android:id="@+id/detail_text"/>
     </ScrollView>
     <Button
             android:text="打开外部链接"

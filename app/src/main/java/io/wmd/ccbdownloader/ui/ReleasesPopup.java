@@ -24,7 +24,8 @@ public class ReleasesPopup extends PopupWindow {
     ReleaseAdapter adapter;
 
     PopupWindow detailPopup;
-    TextView detailText, detailTitle;
+    TextView detailTitle;
+    ChangelogView detailText;
     Button shareLink, dlButton;
 
     ReleaseItem selected;
@@ -75,12 +76,14 @@ public class ReleasesPopup extends PopupWindow {
 
     public void showDetail() {
         detailTitle.setText(selected.title);
-        detailText.setText(selected.changelog);
+        detailText.setChangelog(selected.changelog);
 
         detailPopup.setWidth(  (int)(metrics.widthPixels  * 0.75f) );
         detailPopup.setHeight( (int)(metrics.heightPixels * 0.5f)  );
         detailPopup.showAtLocation(root, Gravity.CENTER, 0, 0);
     }
+
+    public ChangelogView getDetailText() { return detailText; }
 
     public ReleaseItem getSelectedItem() { return selected; }
 

@@ -71,6 +71,24 @@
 				android:id="@+id/click_ccsound_releases"/>
 
 	</LinearLayout>
+	<LinearLayout
+			android:orientation="vertical"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content" android:gravity="center_horizontal">
+		<CheckBox
+				android:text="使用gh-proxy代理"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:id="@+id/checkbox_use_proxy" android:checked="true"/>
+		<CheckBox
+				android:text="详情页面点击链接跳转"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:id="@+id/checkbox_changelog_go" android:layout_weight="1"/>
+		<CheckBox
+				android:text="下载链接直接跳转"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:id="@+id/checkbox_link_directly"
+		/>
+	</LinearLayout>
 	<ListView
 			android:layout_width="match_parent"
 			android:layout_height="match_parent" android:id="@+id/task_list"/>

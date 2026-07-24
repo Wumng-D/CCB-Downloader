@@ -25,12 +25,18 @@ public class MainController {
             "Kenan2000/Otopack-Mods-Updates/releases";
     private final String api_ccsound_url = "https://api.github.com/repos/" +
             "Fris0uman/CDDA-Soundpacks/releases";
-    private final String proxy_url = "https://gh-proxy.org/";
+    private final String gh_proxy_url = "https://gh-proxy.org/";
     private final String listCCBPath = "ccb_releases_list.json";
     private final String listOtopackPath = "otopack_releases_list.json";
-    private final String listCCSoundPath = "otopack_releases_list.json";
+    private final String listCCSoundPath = "ccsound_releases_list.json";
+    private final String preferencePath  = "preference.json";
+
+    private String proxy_url = gh_proxy_url; // default
+    private boolean openLinkDirectly = false;
+    private boolean changelogCanClick = false;
 
     private File listCCBFile, listOtopackFile, listCCSoundFile;
+    private File preferenceFile;
 
     private OkHttpClient client;
 
@@ -48,6 +54,15 @@ public class MainController {
         listCCBFile = new File(manager.getInternalDir(), listCCBPath);
         listOtopackFile = new File(manager.getInternalDir(), listOtopackPath);
         listCCSoundFile = new File(manager.getInternalDir(), listCCSoundPath);
+        preferenceFile  = new File(manager.getInternalDir(), preferencePath);
+
+        try {
+            loadPreference();
+        } catch (IOException e) {
+            screen.showException(e.toString());
+        } catch (JSONException e) {
+            screen.showException(e.toString());
+        }
 
         screen.updateButton.setOnClickListener(v -> {
             try { updateReleases(listCCBFile, api_ccb_url); } catch (IOException e) {
@@ -81,18 +96,72 @@ public class MainController {
                 screen.showException(e.toString());
             }
         });
+
+        screen.releasesPopup.getDetailText().setOnUrlClickListener(url -> {
+            if (changelogCanClick) goBrowser(url);
+        });
+    }
+
+    public void saveState() {
+        // save preference
+        try {
+            saveCache(preferenceFile, saveJSON(proxy_url, openLinkDirectly, changelogCanClick));
+        } catch (IOException e) {
+            screen.showException(e.toString());
+        } catch (JSONException e) {
+            screen.showException(e.toString());
+        }
+    }
+
+    private void loadPreference() throws IOException, JSONException {
+        String preference = "";
+        if (preferenceFile.exists()) {
+            preference = loadCache(preferenceFile);
+        } else { preferenceFile.createNewFile(); }
+
+        if (preference.isEmpty()) {
+            preference = saveJSON(gh_proxy_url, false, false);
+        }
+
+        JSONObject obj = new JSONObject(preference);
+        proxy_url = obj.getString("proxy_url");
+        openLinkDirectly = obj.getBoolean("open_directly");
+        changelogCanClick = obj.getBoolean("changelog_link_go");
+
+        screen.checkBoxUseProxy.setChecked(!proxy_url.isEmpty());
+        screen.checkBoxDirect.setChecked(openLinkDirectly);
+        screen.checkBoxChangelogGo.setChecked(changelogCanClick);
+
+        screen.checkBoxUseProxy.setOnCheckedChangeListener((btn, active) ->
+                proxy_url = active? gh_proxy_url : ""
+        );
+        screen.checkBoxDirect.setOnCheckedChangeListener((btn, active) ->
+                openLinkDirectly = active
+        );
+        screen.checkBoxChangelogGo.setOnCheckedChangeListener((btn, active) ->
+                changelogCanClick = active
+        );
     }
 
     private void startActivity(String url) {
         if (!url.isEmpty()) {
-            Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_SEND);
-            intent.putExtra(Intent.EXTRA_TEXT, proxy_url + url);
-            intent.setType("text/plain");
-            manager.startActivity(Intent.createChooser(intent, null));
+            if (openLinkDirectly) {
+                goBrowser(proxy_url + url);
+            } else {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND);
+                intent.putExtra(Intent.EXTRA_TEXT, proxy_url + url);
+                intent.setType("text/plain");
+                manager.startActivity(Intent.createChooser(intent, null));
+            }
         } else {
             screen.toast("没有找到适合设备的文件");
         }
+    }
+
+    public void goBrowser(String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        manager.startActivity(Intent.createChooser(intent, null));
     }
 
     private void showCCBReleases(File cacheFile) throws IOException {
@@ -145,6 +214,7 @@ public class MainController {
             screen.toast(e.toString());
         }
     }
+
 
     private void updateReleases(File cacheFile, String apiUrl) throws IOException {
         if (canUpdate(cacheFile)) {
@@ -226,6 +296,15 @@ public class MainController {
         try(FileOutputStream stream = new FileOutputStream(file)) {
             stream.write(jsonData.getBytes(StandardCharsets.UTF_8));
         }
+    }
+
+    private String saveJSON(
+            String proxy_url, boolean openLinkDirectly, boolean changelogCanClick) throws JSONException {
+        JSONObject obj = new JSONObject();
+        obj.put("proxy_url", proxy_url);
+        obj.put("open_directly", openLinkDirectly);
+        obj.put("changelog_link_go", changelogCanClick);
+        return obj.toString();
     }
 
     private String loadCache(File file) throws IOException {

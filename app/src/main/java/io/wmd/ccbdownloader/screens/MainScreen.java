@@ -15,7 +15,6 @@ import io.wmd.ccbdownloader.ui.ReleasesPopup;
 public class MainScreen implements Screen {
 
     private Context context;
-    public Context getContext() { return context; }
 
     private View root;
     private PopupWindow exceptionPopup, loadingPopup;
@@ -24,6 +23,7 @@ public class MainScreen implements Screen {
     public Button updateButton, releasesButton;
     public Button updateOtopackButton, releasesOtopackButton;
     public Button updateCCSoundButton, releasesCCSoundButton;
+    public CheckBox checkBoxUseProxy, checkBoxDirect, checkBoxChangelogGo;
 
     @Override
     public View show(Context context) {
@@ -38,6 +38,10 @@ public class MainScreen implements Screen {
 
         updateCCSoundButton    = root.findViewById(R.id.update_ccsound_releases);
         releasesCCSoundButton  = root.findViewById(R.id.click_ccsound_releases);
+
+        checkBoxUseProxy = root.findViewById(R.id.checkbox_use_proxy);
+        checkBoxDirect   = root.findViewById(R.id.checkbox_link_directly);
+        checkBoxChangelogGo = root.findViewById(R.id.checkbox_changelog_go);
 
         releasesPopup = new ReleasesPopup(context, root);
 

@@ -32,5 +32,10 @@ public class MainActivity extends Activity {
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		mainController.saveState();
+	}
 }
 
